@@ -973,18 +973,63 @@ class DeserializerElectra(Deserializer):
 
 
 class DeserializerECCoin(Deserializer):
+
+    #          Version  1  2  3  4
+    #  Fields
+    #  ===========================
+    #  nVersion         1  2  3  4
+    #  nTime            Y  Y  N  N
+    #  [vin]            Y  Y  Y  Y
+    #  [vout]           Y  Y  Y  Y
+    #  nLockTime        Y  Y  Y  Y
+    #  referenceHash    N  Y  N  Y
+
     def read_tx(self):
         tx_version = self._read_le_int32()
-        tx = TxTime(
-            tx_version,
-            self._read_le_uint32(),
-            self._read_inputs(),
-            self._read_outputs(),
-            self._read_le_uint32(),
-        )
 
-        if tx_version > 1:
-            self.cursor += 32
+        if tx_version == 1:
+            
+            tx = TxTime(
+                tx_version,
+                self._read_le_uint32(),
+                self._read_inputs(),
+                self._read_outputs(),
+                self._read_le_uint32(),
+            )
+
+        if tx_version == 2:
+            
+            tx = TxTime(
+                tx_version,
+                self._read_le_uint32(),
+                self._read_inputs(),
+                self._read_outputs(),
+                self._read_le_uint32(),
+            )
+
+            self.cursor += 32 # skip reference hash
+
+        if tx_version == 3:
+            
+            tx = TxTime(
+                tx_version,
+                0,
+                self._read_inputs(),
+                self._read_outputs(),
+                self._read_le_uint32(),
+            )
+
+        if tx_version == 4:
+            
+            tx = TxTime(
+                tx_version,
+                0,
+                self._read_inputs(),
+                self._read_outputs(),
+                self._read_le_uint32(),
+            )
+
+            self.cursor += 32 # skip reference hash
 
         return tx
 
