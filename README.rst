@@ -20,3 +20,13 @@ See `readthedocs <https://electrumx.readthedocs.io/>`_.
 
 
 **Neil Booth**  kyuupichan@gmail.com  https://github.com/kyuupichan
+
+**NOTE**
+
+The parent project stopped supporting altcoins after tag 1.15.1.
+
+This repo was therefore forked and rewound as follows:
+
+$ git reset --hard 835aa49
+
+$ git push -f
