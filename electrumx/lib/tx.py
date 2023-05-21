@@ -971,7 +971,6 @@ class DeserializerElectra(Deserializer):
                 self._read_le_uint32()  # locktime
             )
 
-
 class DeserializerECCoin(Deserializer):
 
     #          Version  1  2  3  4
@@ -1012,7 +1011,8 @@ class DeserializerECCoin(Deserializer):
         if tx_version == 3:
             
             tx = TxTime(
-                tx_version,
+#                tx_version,
+                1,
                 0,
                 self._read_inputs(),
                 self._read_outputs(),
@@ -1022,7 +1022,8 @@ class DeserializerECCoin(Deserializer):
         if tx_version == 4:
             
             tx = TxTime(
-                tx_version,
+#                tx_version,
+                2,
                 0,
                 self._read_inputs(),
                 self._read_outputs(),
@@ -1115,16 +1116,3 @@ class DeserializerSimplicity(Deserializer):
                 self._read_outputs(),   # outputs
                 self._read_le_uint32()  # locktime
             )
-
-
-class DeserializerPrimecoin(Deserializer):
-    def read_header(self, static_header_size):
-        '''Return the block header bytes'''
-        start = self.cursor
-        # Decode the block header size including multiplier then read it as bytes
-        self.cursor += static_header_size
-        multiplier_size = self._read_varint()
-        self.cursor += multiplier_size
-        header_end = self.cursor
-        self.cursor = start
-        return self._read_nbytes(header_end - start)
